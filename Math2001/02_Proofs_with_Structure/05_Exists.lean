@@ -8,7 +8,8 @@ math2001_init
 example {a : ℚ} (h : ∃ b : ℚ, a = b ^ 2 + 1) : a > 0 := by
   obtain ⟨b, hb⟩ := h
   calc
-    a = b ^ 2 + 1 := hb
+    a
+    _ = b ^ 2 + 1 := hb
     _ > 0 := by extra
 
 
