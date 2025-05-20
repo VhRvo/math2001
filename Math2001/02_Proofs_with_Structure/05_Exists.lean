@@ -129,16 +129,81 @@ example (x : ℚ) : ∃ y : ℚ, y ^ 2 > x := by
         _ > x * 1 := by rel [hx']
         _ = x := by ring } }
 
-
 example {t : ℝ} (h : ∃ a : ℝ, a * t + 1 < a + t) : t ≠ 1 := by
-  sorry
+  obtain ⟨ a, ha ⟩ := h
+  have ha : (a - 1) * (t - 1) < 0 := by
+    calc
+      (a - 1) * (t - 1)
+      _ = a * t + 1 - a - t := by ring
+      _ < a + t - a - t := by rel [ha]
+      _ = 0 := by ring
+  intro ht
+  apply ne_of_lt ha
+  calc
+    (a - 1) * (t - 1)
+    _ = (a - 1) * (1 - 1) := by rw [ht]
+    _ = 0 := by ring
 
 example {m : ℤ} (h : ∃ a, 2 * a = m) : m ≠ 5 := by
-  sorry
+  obtain ⟨ a, h ⟩ := h
+  obtain ha | ha := le_or_succ_le a 2
+  { apply ne_of_lt
+    calc
+      m
+      _ = 2 * a := by rw [h]
+      _ ≤ 2 * 2 := by rel [ha]
+      _ < 5 := by numbers }
+  { apply ne_of_gt
+    calc
+      (5 : ℤ)
+      _ < 2 * 3 := by numbers
+      _ ≤ 2 * a := by rel [ha]
+      _ = m := by rw [h] }
 
+-- extra and rel are too stupid.
 example {n : ℤ} : ∃ a, 2 * a ^ 3 ≥ n * a + 7 := by
-  sorry
+  obtain h | h := le_or_succ_le n 0
+  { use 7
+    calc
+      (2 * 7 ^ 3 : ℤ)
+      _ ≥ (0 * 7) + 7 := by numbers
+      _ ≥ (n * 7) + 7 := by rel [h] }
+  { have hn1 : 7 ≤ n + 7 := by extra
+    have hn2 : n ≤ n + 7 := by extra
+    use n + 7
+    calc
+      2 * (n + 7) ^ 3
+      _ = (n + 7) ^ 3 + (n + 7) ^ 3 := by ring
+      _ = (n + 7) * (n + 7) * (n + 7) + (n + 7) ^ 3 := by ring
+      _ ≥ n * n * (n + 7) + (n + 7) ^ 3 := by rel [hn2]
+      _ ≥ 1 * n * (n + 7) + (n + 7) ^ 3 := by rel [h]
+      _ ≥ 1 * n * (n + 7) + 7 ^ 3 := by rel [hn1]
+      _ = n * (n + 7) + 7 ^ 3 := by ring
+      _ = n * (n + 7) + 7 + 7 * (7 ^ 2 - 1) := by ring
+      _ ≥ n * (n + 7) + 7 := by extra }
 
 example {a b c : ℝ} (ha : a ≤ b + c) (hb : b ≤ a + c) (hc : c ≤ a + b) :
     ∃ x y z, x ≥ 0 ∧ y ≥ 0 ∧ z ≥ 0 ∧ a = y + z ∧ b = x + z ∧ c = x + y := by
-  sorry
+  use (b + c - a) / 2
+  use (a + c - b) / 2
+  use (a + b - c) / 2
+  constructor
+  { calc
+      (b + c - a) / 2
+      _ ≥ (a - a) / 2 := by rel [ha]
+      _ = 0 := by ring }
+  constructor
+  { calc
+      (a + c - b) / 2
+      _ ≥ (b - b) / 2 := by rel [hb]
+      _ = 0 := by ring }
+  constructor
+  { calc
+      (a + b - c) / 2
+      _ ≥ (c - c) / 2 := by rel [hc]
+      _ = 0 := by ring }
+  constructor
+  { ring }
+  constructor
+  { ring }
+  { ring }
