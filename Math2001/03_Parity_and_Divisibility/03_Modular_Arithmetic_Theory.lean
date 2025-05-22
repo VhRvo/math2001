@@ -4,7 +4,6 @@ import Library.Theory.ModEq.Defs
 
 math2001_init
 
-
 example : 11 ≡ 3 [ZMOD 4] := by
   use 2
   numbers
@@ -60,6 +59,12 @@ theorem Int.ModEq.mul {n a b c d : ℤ} (h1 : a ≡ b [ZMOD n]) (h2 : c ≡ d [Z
     _ = n * (x * c + b * y) := by ring
 
 theorem Int.ModEq.pow_two (h : a ≡ b [ZMOD n]) : a ^ 2 ≡ b ^ 2 [ZMOD n] := by
+  repeat rw [pow_succ]
+  repeat rw [pow_zero]
+  repeat rw [mul_one]
+  exact Int.ModEq.mul h h
+
+theorem Int.ModEq.pow_two.manual (h : a ≡ b [ZMOD n]) : a ^ 2 ≡ b ^ 2 [ZMOD n] := by
   obtain ⟨x, hx⟩ := h
   use x * (a + b)
   calc
@@ -69,6 +74,12 @@ theorem Int.ModEq.pow_two (h : a ≡ b [ZMOD n]) : a ^ 2 ≡ b ^ 2 [ZMOD n] := b
     _ = n * (x * (a + b)) := by ring
 
 theorem Int.ModEq.pow_three (h : a ≡ b [ZMOD n]) : a ^ 3 ≡ b ^ 3 [ZMOD n] := by
+  repeat rw [pow_succ]
+  repeat rw [pow_zero]
+  repeat rw [mul_one]
+  exact Int.ModEq.mul h (Int.ModEq.mul h h)
+
+theorem Int.ModEq.pow_three.manual (h : a ≡ b [ZMOD n]) : a ^ 3 ≡ b ^ 3 [ZMOD n] := by
   dsimp [Int.ModEq] at *
   obtain ⟨k, hk⟩ := h
   use (a ^ 2 + b * (a + b)) * k
@@ -113,6 +124,20 @@ theorem Int.ModEq.pow (k : ℕ) (h : a ≡ b [ZMOD n]) : a ^ k ≡ b ^ k [ZMOD n
       _ = n * 0 := by ring }
   | succ k ih =>
   { rw [Nat.succ_eq_add_one]
+    repeat rw [pow_succ]
+    exact Int.ModEq.mul h ih }
+
+theorem Int.ModEq.pow.manual (k : ℕ) (h : a ≡ b [ZMOD n]) : a ^ k ≡ b ^ k [ZMOD n] := by
+  induction k with
+  | zero =>
+  { use 0
+    dsimp
+    calc
+      a ^ 0 - b ^ 0
+      _ = 0 := by ring
+      _ = n * 0 := by ring }
+  | succ k ih =>
+  { rw [Nat.succ_eq_add_one]
     obtain ⟨f₁, hf₁⟩ := h
     obtain ⟨fκ, hfκ⟩ := ih
     use a ^ k * f₁ + fκ * b
@@ -137,7 +162,6 @@ example {a b : ℤ} (ha : a ≡ 2 [ZMOD 4]) :
     _ = 4 * x * (b ^ 2 + a * b + 2 * b + 3) := by rw [hx]
     _ = 4 * (x * (b ^ 2 + a * b + 2 * b + 3)) := by ring
 
-
 example {a b : ℤ} (ha : a ≡ 2 [ZMOD 4]) :
     a * b ^ 2 + a ^ 2 * b + 3 * a ≡ 2 * b ^ 2 + 2 ^ 2 * b + 3 * 2 [ZMOD 4] := by
   apply Int.ModEq.add
@@ -154,7 +178,6 @@ example {a b : ℤ} (ha : a ≡ 2 [ZMOD 4]) :
   apply ha
 
 /-! # Exercises -/
-
 
 example : 34 ≡ 104 [ZMOD 5] := by
   use -14
@@ -190,6 +213,13 @@ example : a + n * c ≡ a [ZMOD n] := by
     _ = n * c := by ring
 
 example {a b : ℤ} (h : a ≡ b [ZMOD 5]) : 2 * a + 3 ≡ 2 * b + 3 [ZMOD 5] := by
+  apply Int.ModEq.add
+  apply Int.ModEq.mul
+  exact Int.ModEq.refl 2
+  exact h
+  exact Int.ModEq.refl 3
+
+example {a b : ℤ} (h : a ≡ b [ZMOD 5]) : 2 * a + 3 ≡ 2 * b + 3 [ZMOD 5] := by
   dsimp [Int.ModEq] at *
   obtain ⟨k, hk⟩ := h
   use 2 * k
@@ -201,6 +231,13 @@ example {a b : ℤ} (h : a ≡ b [ZMOD 5]) : 2 * a + 3 ≡ 2 * b + 3 [ZMOD 5] :=
     _ = 5 * (2 * k) := by ring
 
 example {m n : ℤ} (h : m ≡ n [ZMOD 4]) : 3 * m - 1 ≡ 3 * n - 1 [ZMOD 4] := by
+  apply Int.ModEq.sub
+  apply Int.ModEq.mul
+  exact Int.ModEq.refl 3
+  exact h
+  exact Int.ModEq.refl 1
+
+example {m n : ℤ} (h : m ≡ n [ZMOD 4]) : 3 * m - 1 ≡ 3 * n - 1 [ZMOD 4] := by
   dsimp [Int.ModEq] at *
   obtain ⟨k, hk⟩ := h
   use 3 * k
@@ -209,6 +246,16 @@ example {m n : ℤ} (h : m ≡ n [ZMOD 4]) : 3 * m - 1 ≡ 3 * n - 1 [ZMOD 4] :=
     _ = 3 * (m - n) := by ring
     _ = 3 * (4 * k) := by rw [hk]
     _ = 4 * (3 * k) := by ring
+
+example {k : ℤ} (hb : k ≡ 3 [ZMOD 5]) :
+    4 * k + k ^ 3 + 3 ≡ 4 * 3 + 3 ^ 3 + 3 [ZMOD 5] := by
+  apply Int.ModEq.add
+  { apply Int.ModEq.add
+    { apply Int.ModEq.mul
+      { exact Int.ModEq.refl 4 }
+      { exact hb } }
+    { exact Int.ModEq.pow_three hb } }
+  { exact Int.ModEq.refl 3}
 
 example {k : ℤ} (hb : k ≡ 3 [ZMOD 5]) :
     4 * k + k ^ 3 + 3 ≡ 4 * 3 + 3 ^ 3 + 3 [ZMOD 5] := by

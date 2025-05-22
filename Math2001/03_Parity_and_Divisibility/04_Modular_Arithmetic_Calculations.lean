@@ -4,11 +4,9 @@ import Library.Tactic.ModEq
 
 math2001_init
 
-
 example {a b : ℤ} (ha : a ≡ 2 [ZMOD 4]) :
     a * b ^ 2 + a ^ 2 * b + 3 * a ≡ 2 * b ^ 2 + 2 ^ 2 * b + 3 * 2 [ZMOD 4] := by
   rel [ha]
-
 
 example {a b : ℤ} (ha : a ≡ 4 [ZMOD 5]) (hb : b ≡ 3 [ZMOD 5]) :
     a * b + b ^ 3 + 3 ≡ 2 [ZMOD 5] :=
