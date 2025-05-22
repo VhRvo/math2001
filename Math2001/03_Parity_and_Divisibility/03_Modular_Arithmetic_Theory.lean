@@ -25,7 +25,6 @@ theorem Int.ModEq.add {n a b c d : ℤ} (h1 : a ≡ b [ZMOD n]) (h2 : c ≡ d [Z
     _ = n * x + n * y := by rw [hx, hy]
     _ = n * (x + y) := by ring
 
-
 theorem Int.ModEq.sub {n a b c d : ℤ} (h1 : a ≡ b [ZMOD n]) (h2 : c ≡ d [ZMOD n]) :
     a - c ≡ b - d [ZMOD n] := by
   dsimp [Int.ModEq] at *
@@ -69,7 +68,6 @@ theorem Int.ModEq.pow_two (h : a ≡ b [ZMOD n]) : a ^ 2 ≡ b ^ 2 [ZMOD n] := b
     _ = n * x * (a + b) := by rw [hx]
     _ = n * (x * (a + b)) := by ring
 
-
 theorem Int.ModEq.pow_three (h : a ≡ b [ZMOD n]) : a ^ 3 ≡ b ^ 3 [ZMOD n] := by
   dsimp [Int.ModEq] at *
   obtain ⟨k, hk⟩ := h
@@ -85,8 +83,38 @@ theorem Int.ModEq.pow_three (h : a ≡ b [ZMOD n]) : a ^ 3 ≡ b ^ 3 [ZMOD n] :=
     _ = (a ^ 2 + b * (a + b)) * (n * k) := by rw [hk]
     _ = n * ((a ^ 2 + b * (a + b)) * k) := by ring
 
-theorem Int.ModEq.pow (k : ℕ) (h : a ≡ b [ZMOD n]) : a ^ k ≡ b ^ k [ZMOD n] :=
-  sorry -- we'll prove this later in the book
+theorem Int.ModEq.pow.helper (k : ℕ) (h : a ≡ b [ZMOD n]) : a ^ k ≡ b ^ k [ZMOD a - b] := by
+  induction k with
+  | zero =>
+  { use 0
+    dsimp
+    calc
+      a ^ 0 - b ^ 0
+      _ = 0 := by ring
+      _ = (a - b) * 0 := by ring }
+  | succ k ih =>
+  { obtain ⟨f, hf⟩ := ih
+    use a ^ k + f * b
+    rw [Nat.succ_eq_add_one]
+    calc
+      a ^ (k + 1) - b ^ (k + 1)
+      _ = a ^ k * (a - b) + (a ^ k - b ^ k) * b := by ring
+      _ = a ^ k * (a - b) + ((a - b) * f) * b := by rw [hf]
+      _ = (a - b) * (a ^ k + f * b) := by ring }
+
+theorem Int.ModEq.pow (k : ℕ) (h : a ≡ b [ZMOD n]) : a ^ k ≡ b ^ k [ZMOD n] := by
+  induction k with
+  | zero =>
+  { use 0
+    dsimp
+    calc
+      a ^ 0 - b ^ 0
+      _ = 0 := by ring
+      _ = n * 0 := by ring }
+  | succ k ih =>
+  { rw [Nat.succ_eq_add_one]
+    sorry }
+
 
 theorem Int.ModEq.refl (a : ℤ) : a ≡ a [ZMOD n] := by
   use 0
