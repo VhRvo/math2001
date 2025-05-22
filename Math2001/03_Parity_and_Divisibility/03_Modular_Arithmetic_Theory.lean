@@ -83,7 +83,7 @@ theorem Int.ModEq.pow_three (h : a ≡ b [ZMOD n]) : a ^ 3 ≡ b ^ 3 [ZMOD n] :=
     _ = (a ^ 2 + b * (a + b)) * (n * k) := by rw [hk]
     _ = n * ((a ^ 2 + b * (a + b)) * k) := by ring
 
-theorem Int.ModEq.pow.helper (k : ℕ) (h : a ≡ b [ZMOD n]) : a ^ k ≡ b ^ k [ZMOD a - b] := by
+example (k : ℕ) (h : a ≡ b [ZMOD n]) : a ^ k ≡ b ^ k [ZMOD a - b] := by
   induction k with
   | zero =>
   { use 0
@@ -113,8 +113,15 @@ theorem Int.ModEq.pow (k : ℕ) (h : a ≡ b [ZMOD n]) : a ^ k ≡ b ^ k [ZMOD n
       _ = n * 0 := by ring }
   | succ k ih =>
   { rw [Nat.succ_eq_add_one]
-    sorry }
-
+    obtain ⟨f₁, hf₁⟩ := h
+    obtain ⟨fκ, hfκ⟩ := ih
+    use a ^ k * f₁ + fκ * b
+    calc
+      a ^ (k + 1) - b ^ (k + 1)
+      _ = a ^ (k + 1) - a ^ k * b + a ^ k * b - b ^ (k + 1) := by ring
+      _ = a ^ k * (a - b) + (a ^ k - b ^ k) * b := by ring
+      _ = a ^ k * (n * f₁) + n * fκ * b := by rw [hf₁, hfκ]
+      _ = n * (a ^ k * f₁ + fκ * b) := by ring }
 
 theorem Int.ModEq.refl (a : ℤ) : a ≡ a [ZMOD n] := by
   use 0
