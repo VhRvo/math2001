@@ -11,7 +11,6 @@ https://hrmacbeth.github.io/math2001/01_Proofs_by_Calculation.html#proving-equal
 
 I recommend splitting your screen to display the code and the book side by side! -/
 
-
 -- Example 1.2.1
 example {a b : ℚ} (h1 : a - b = 4) (h2 : a * b = 1) : (a + b) ^ 2 = 20 :=
   calc

@@ -64,10 +64,14 @@ example (a b : ℤ) : (a + b) ^ 3 ≡ a ^ 3 + b ^ 3 [ZMOD 3] := by
   -- dsimp [Int.ModEq]
   use a ^ 2 * b + a * b ^ 2
   ring
-  -- calc
-  --   (a + b) ^ 3 - (a ^ 3 + b ^ 3)
-  --   _ = 3 * a ^ 2 * b + 3 * a * b ^ 2 := by ring
-  --   _ = 3 * (a ^ 2 * b + a * b ^ 2) := by ring
+
+example (a b : ℤ) : (a + b) ^ 3 ≡ a ^ 3 + b ^ 3 [ZMOD 3] := by
+  -- dsimp [Int.ModEq]
+  use a ^ 2 * b + a * b ^ 2
+  calc
+    (a + b) ^ 3 - (a ^ 3 + b ^ 3)
+    _ = 3 * a ^ 2 * b + 3 * a * b ^ 2 := by ring
+    _ = 3 * (a ^ 2 * b + a * b ^ 2) := by ring
 
 example : ∃ a : ℤ, 4 * a ≡ 1 [ZMOD 7] := by
   use 2

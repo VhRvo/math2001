@@ -109,7 +109,6 @@ example {a b c : ℝ} :
           + a ^ 2 * (a ^ 6 + 8 * b ^ 3 * c ^ 3) := by extra
     _ = (a ^ 4 + b ^ 4 + c ^ 4) ^ 2 := by ring
 
-
 /-! # Exercises
 
 Solve these problems yourself.  You may find it helpful to solve them on paper before typing them

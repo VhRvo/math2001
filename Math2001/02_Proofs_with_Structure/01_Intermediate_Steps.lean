@@ -4,7 +4,6 @@ import Library.Basic
 
 math2001_init
 
-
 example {a b : ℝ} (h1 : a - 5 * b = 4) (h2 : b + 2 = 3) : a = 9 := by
   have hb : b = 1 := by addarith [h2]
   calc
@@ -12,7 +11,6 @@ example {a b : ℝ} (h1 : a - 5 * b = 4) (h2 : b + 2 = 3) : a = 9 := by
     _ = a - 5 * b + 5 * b := by ring
     _ = 4 + 5 * 1 := by rw [h1, hb]
     _ = 9 := by ring
-
 
 example {m n : ℤ} (h1 : m + 3 ≤ 2 * n - 1) (h2 : n ≤ 5) : m ≤ 6 := by
   have h3 :=

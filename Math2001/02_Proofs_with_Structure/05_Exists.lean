@@ -4,14 +4,12 @@ import Library.Basic
 
 math2001_init
 
-
 example {a : ℚ} (h : ∃ b : ℚ, a = b ^ 2 + 1) : a > 0 := by
   obtain ⟨b, hb⟩ := h
   calc
     a
     _ = b ^ 2 + 1 := hb
     _ > 0 := by extra
-
 
 example {t : ℝ} (h : ∃ a : ℝ, a * t < 0) : t ≠ 0 := by
   obtain ⟨x, hxt⟩ := h
@@ -73,7 +71,6 @@ example : ∃ a b c d : ℕ,
   numbers
 
 /-! # Exercises -/
-
 
 example : ∃ t : ℚ, t ^ 2 = 1.69 := by
   use 1.3

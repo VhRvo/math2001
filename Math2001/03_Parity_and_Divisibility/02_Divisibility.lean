@@ -4,7 +4,6 @@ import Library.Basic
 
 math2001_init
 
-
 example : (11 : ℕ) ∣ 88 := by
   dsimp [(· ∣ ·)]
   use 8
@@ -22,10 +21,14 @@ example {a b : ℤ} (hab : a ∣ b) : a ∣ b ^ 2 + 2 * b := by
   use k * (a * k + 2)
   rw [hk]
   ring
-  -- calc
-  --   b ^ 2 + 2 * b
-  --   _ = (a * k) ^ 2 + 2 * (a * k) := by rw [hk]
-  --   _ = a * (k * (a * k + 2)) := by ring
+
+example {a b : ℤ} (hab : a ∣ b) : a ∣ b ^ 2 + 2 * b := by
+  obtain ⟨k, hk⟩ := hab
+  use k * (a * k + 2)
+  calc
+    b ^ 2 + 2 * b
+    _ = (a * k) ^ 2 + 2 * (a * k) := by rw [hk]
+    _ = a * (k * (a * k + 2)) := by ring
 
 example {a b c : ℕ} (hab : a ∣ b) (hbc : b ^ 2 ∣ c) : a ^ 2 ∣ c := by
   dsimp [(· ∣ ·)] at *

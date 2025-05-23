@@ -34,7 +34,6 @@ example {a b : ℝ} (h1 : a - 5 * b = 4) (h2 : b + 2 = 3) : a = 9 ∧ b = 1 := b
       _ = 9 := by ring }
   { addarith [h2] }
 
-
 example {a b : ℝ} (h1 : a - 5 * b = 4) (h2 : b + 2 = 3) : a = 9 ∧ b = 1 := by
   have hb : b = 1 := by addarith [h2]
   constructor
@@ -43,7 +42,6 @@ example {a b : ℝ} (h1 : a - 5 * b = 4) (h2 : b + 2 = 3) : a = 9 ∧ b = 1 := b
       _ = 4 + 5 * 1 := by rw [hb]
       _ = 9 := by ring }
   { apply hb }
-
 
 example {a b : ℝ} (h1 : a ^ 2 + b ^ 2 = 0) : a = 0 ∧ b = 0 := by
   have h2 : a ^ 2 = 0 := by

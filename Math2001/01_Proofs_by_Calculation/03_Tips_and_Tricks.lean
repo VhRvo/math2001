@@ -9,7 +9,6 @@ math2001_init
 Exercise: choose some of these examples and type out the whole proofs printed in the text as Lean
 proofs. -/
 
-
 -- Example 1.3.1
 example {a b : ℤ} (h1 : a = 2 * b + 5) (h2 : b = 3) : a = 11 :=
   calc
@@ -102,7 +101,6 @@ example {z : ℝ} (h1 : z ^ 2 - 2 = 0) : z ^ 4 - z ^ 3 - z ^ 2 + 2 * z + 1 = 3 :
 
 Solve these problems yourself.  You may find it helpful to solve them on paper before typing them
 up in Lean. -/
-
 
 example {x y : ℝ} (h1 : x = 3) (h2 : y = 4 * x - 3) : y = 9 :=
   calc
